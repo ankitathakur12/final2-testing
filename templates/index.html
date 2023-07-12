@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Camera Capture</title>
+  </head>
+  <body>
+    <button id="captureBtn">Capture Photo</button>
+    <video id="videoElement" autoplay></video>
+    <canvas id="canvasElement" style="display: none;"></canvas>
+
+    <script>
+      const video = document.getElementById('videoElement');
+      const canvas = document.getElementById('canvasElement');
+      const captureButton = document.getElementById('captureBtn');
+
+      // Get video stream from the camera
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          video.srcObject = stream;
+        })
+        .catch(error => {
+          console.error('Error accessing camera:', error);
+        });
+
+      // Capture photo from video stream
+      function capturePhoto() {
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg');
+
+        // Send photo to the backend
+        sendPhotoToBackend(dataUrl);
+        console.log(dataUrl)
+      }
+
+      // Send photo to the backend
+      function sendPhotoToBackend(photoData) {
+        // Make a POST request to the backend endpoint
+        fetch('/process-image/', {
+          method: 'GET',
+          body: JSON.stringify({ 'photo': photoData }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+          // Handle the response from the backend
+          console.log('Photo sent successfully');
+        })
+        .catch(error => {
+          console.error('Error sending photo:', error);
+        });
+      }
+
+      // Attach click event listener to the capture button
+      captureButton.addEventListener('click', capturePhoto);
+    </script>
+  </body>
+</html>
