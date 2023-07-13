@@ -41,13 +41,14 @@
 
       // Send photo to the backend
       function sendPhotoToBackend(photoData) {
+       //photo = "DX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb%2F2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAg"
         // Make a POST request to the backend endpoint
         csrf_token = $("input[name='csrfmiddlewaretoken']").val();
         $.ajax({
           url:'/process-image/',
           type: 'POST',
-          data: {'photo': JSON.stringify(photoData)},
-          contentType: 'application/json',
+          data: {"photo": JSON.stringify(photoData)},
+          //contentType: 'application/json',
           headers:{'X-CSRFToken':csrf_token},
           success:function(data){
             console.log('Photo sent successfully');
