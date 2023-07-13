@@ -77,7 +77,7 @@ def process_image(request):
         print("11111111",photo.split('base64,')[1])
         with open("static/input_image/input1.png", "wb") as f:
             f.write(base64.b64decode(photo.split('base64,')[1]))#photo.split('base64,')[1]
-        image_path = "input_image/input.jpg"
+        image_path = "static/input_image/input1.png"
         image = cv2.imread(image_path)  # Read in the image
         if image is None:
             raise FileNotFoundError(f"Image not found at path: {image_path}")
