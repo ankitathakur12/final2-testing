@@ -74,12 +74,13 @@ class MailInbox(TemplateView):
 def process_image(request):
     if request.method == 'POST':
         print(request.GET)
-        photo = json.loads(request.POST['photo'])
+        photo = request.POST['photo']
         print("11111111",photo.split('base64,')[1])
         file_name = str(datetime.now()).replace(' ','-').replace(':','-')
         with open("static/input_image/input_"+file_name+".png", "wb") as f:
             f.write(base64.b64decode(photo.split('base64,')[1]))#photo.split('base64,')[1]
         image_path = "static/input_image/input_"+file_name+".png"
+        # image_path = "static/input_image/1689262050027.JPEG"
         image = cv2.imread(image_path)  # Read in the image
         if image is None:
             raise FileNotFoundError(f"Image not found at path: {image_path}")
