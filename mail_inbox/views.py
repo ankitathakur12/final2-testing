@@ -14,6 +14,7 @@ import numpy as np
 import json
 import base64
 import os
+from datetime import datetime
 
 def mapp(h):
     h = h.reshape((4,2))
@@ -75,9 +76,10 @@ def process_image(request):
         print(request.GET)
         photo = json.loads(request.POST['photo'])
         print("11111111",photo.split('base64,')[1])
-        with open("static/input_image/input1.png", "wb") as f:
+        file_name = str(datetime.now()).replace(' ','-').replace(':','-')
+        with open("static/input_image/input_"+file_name+".png", "wb") as f:
             f.write(base64.b64decode(photo.split('base64,')[1]))#photo.split('base64,')[1]
-        image_path = "static/input_image/input1.png"
+        image_path = "static/input_image/input_"+file_name+".png"
         image = cv2.imread(image_path)  # Read in the image
         if image is None:
             raise FileNotFoundError(f"Image not found at path: {image_path}")
@@ -86,15 +88,13 @@ def process_image(request):
         orig = image.copy()
 
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # RGB To Gray Scale
-        blurred = cv2.GaussianBlur(gray, (5, 5),
-                                   0)  # (5,5) is the kernel size and 0 is sigma that determines the amount of blur
+        blurred = cv2.GaussianBlur(gray, (5, 5),0)  # (5,5) is the kernel size and 0 is sigma that determines the amount of blur
         # cv2.imshow("Blur",blurred)
 
         edged = cv2.Canny(blurred, 30, 50)  # 30 MinThreshold and 50 is the MaxThreshold
         # cv2.imshow("Canny",edged)
 
-        contours, hierarchy = cv2.findContours(edged, cv2.RETR_LIST,
-                                               cv2.CHAIN_APPROX_SIMPLE)  # retrieve the contours as a list, with simple apprximation model
+        contours, hierarchy = cv2.findContours(edged, cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)  # retrieve the contours as a list, with simple apprximation model
         contours = sorted(contours, key=cv2.contourArea, reverse=True)
 
         # the loop extracts the boundary contours of the page
@@ -111,6 +111,6 @@ def process_image(request):
 
         op = cv2.getPerspectiveTransform(approx, pts)  # get the top or bird eye view effect
         dst = cv2.warpPerspective(orig, op, (800, 800))
-
-        cv2.imwrite("static/output_images/output_image1.jpg", dst)
-        return JsonResponse({'url': 'static/output_images/output_image1.jpg'})
+        output = "static/output_images/output_"+file_name+".png"
+        cv2.imwrite(output, dst)
+        return JsonResponse({'url': output})
