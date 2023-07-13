@@ -6,6 +6,7 @@
     <script src="static/js/jquery.min.js"></script>
   </head>
   <body>
+    {% csrf_token %}
     <button id="captureBtn">Capture Photo</button>
     <video id="videoElement" autoplay></video>
     <canvas id="canvasElement" style="display: none;"></canvas>
@@ -41,12 +42,13 @@
       // Send photo to the backend
       function sendPhotoToBackend(photoData) {
         // Make a POST request to the backend endpoint
+        csrf_token = $("input[name='csrfmiddlewaretoken']").val();
         $.ajax({
           url:'/process-image/',
-          type: 'GET',
+          type: 'POST',
           data: {'photo': JSON.stringify(photoData)},
           contentType: 'application/json',
-          headers: {'Content-Type': 'application/json'},
+          headers:{'X-CSRFToken':csrf_token},
           success:function(data){
             console.log('Photo sent successfully');
             $('#cropped_img').attr('src','static/output_images/output_image1.jpg')

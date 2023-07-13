@@ -71,9 +71,9 @@ class MailInbox(TemplateView):
 
 
 def process_image(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         print(request.GET)
-        photo = json.loads(request.GET['photo'])
+        photo = json.loads(request.POST['photo'])
         print("11111111",photo.split('base64,')[1])
         with open("static/input_image/input1.png", "wb") as f:
             f.write(base64.b64decode(photo.split('base64,')[1]))#photo.split('base64,')[1]
