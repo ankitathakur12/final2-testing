@@ -1,15 +1,9 @@
-from msilib.schema import File
+# from msilib.schema import File
 from tempfile import NamedTemporaryFile
 from urllib.request import urlopen
-
 from django.http import JsonResponse
-# Create your views here.
-from django.shortcuts import render
-
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.shortcuts import render
-
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.temp import NamedTemporaryFile
@@ -19,7 +13,7 @@ import cv2
 import numpy as np
 import json
 import base64
-import numpy as np
+import os
 
 def mapp(h):
     h = h.reshape((4,2))
@@ -78,11 +72,11 @@ class MailInbox(TemplateView):
 
 def process_image(request):
     if request.method == 'GET':
+        print(request.GET)
         photo = json.loads(request.GET['photo'])
-        print(photo)
-        print(photo.split('base64,')[1])
-        with open("/input_images/input.png", "wb") as f:
-            f.write(base64.b64decode(photo.split('base64,')[1]))
+        print("11111111",photo.split('base64,')[1])
+        with open("static/input_image/input1.png", "wb") as f:
+            f.write(base64.b64decode(photo.split('base64,')[1]))#photo.split('base64,')[1]
         image_path = "input_image/input.jpg"
         image = cv2.imread(image_path)  # Read in the image
         if image is None:
@@ -118,5 +112,5 @@ def process_image(request):
         op = cv2.getPerspectiveTransform(approx, pts)  # get the top or bird eye view effect
         dst = cv2.warpPerspective(orig, op, (800, 800))
 
-        cv2.imwrite("output_images\output_image.jpg", dst)
-        return JsonResponse({'message': 'API response'})
+        cv2.imwrite("static/output_images/output_image1.jpg", dst)
+        return JsonResponse({'url': 'static/output_images/output_image1.jpg'})

@@ -3,12 +3,15 @@
   <head>
     <meta charset="UTF-8">
     <title>Camera Capture</title>
+    <script src="static/js/jquery.min.js"></script>
   </head>
   <body>
     <button id="captureBtn">Capture Photo</button>
     <video id="videoElement" autoplay></video>
     <canvas id="canvasElement" style="display: none;"></canvas>
-
+    <div class="image_area" style="display:none;">
+    <image src="static/output_images/output_image.jpg" height="400" width="400" id="cropped_img" >
+    </div>
     <script>
       const video = document.getElementById('videoElement');
       const canvas = document.getElementById('canvasElement');
@@ -17,6 +20,7 @@
       // Get video stream from the camera
       navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
+          //window.stream = stream;
           video.srcObject = stream;
         })
         .catch(error => {
@@ -37,22 +41,22 @@
       // Send photo to the backend
       function sendPhotoToBackend(photoData) {
         // Make a POST request to the backend endpoint
-        fetch('/process-image/', {
-          method: 'GET',
-          body: JSON.stringify({ 'photo': photoData }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => {
-          // Handle the response from the backend
-          console.log('Photo sent successfully');
-        })
-        .catch(error => {
-          console.error('Error sending photo:', error);
+        $.ajax({
+          url:'/process-image/',
+          type: 'GET',
+          data: {'photo': JSON.stringify(photoData)},
+          contentType: 'application/json',
+          headers: {'Content-Type': 'application/json'},
+          success:function(data){
+            console.log('Photo sent successfully');
+            $('#cropped_img').attr('src','static/output_images/output_image1.jpg')
+            $('.image_area').css('display','block')
+
+          },
+          error:function(error){
+            console.error('Error sending photo:', error);}
         });
       }
-
       // Attach click event listener to the capture button
       captureButton.addEventListener('click', capturePhoto);
     </script>
