@@ -27,6 +27,8 @@ SECRET_KEY = 'django-insecure-81zr3_*ner77cn*jw(o#3jiacp1c0pb5=26$2f_byt6@)3z^m5
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS=['https://mailbox.creativebuffer.com']
+CORS_ORIGIN_WHITELIST = ['https://mailbox.creativebuffer.com']
 
 
 # Application definition
