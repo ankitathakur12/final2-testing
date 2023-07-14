@@ -26,8 +26,15 @@ $(document).ready(function(){
             data: formData,
             processData: false,
             contentType: false,
+            beforeSend:function(){
+            $('.parent-loader').css('display','block')
+            },
+            complete:function(){
+            $('.parent-loader').css('display','none')
+            },
             success:function(data){
               console.log('Photo sent successfully', data['url']);
+              $('#cropped_img').css('display','block')
               $('#cropped_img').attr('src', data['url']);
               $('.image_area').css('display', 'block');
             },
