@@ -23,6 +23,8 @@ from mail_inbox import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.MailInbox.as_view() ),
-    path('process-image/', views.process_image, name='process_image'),
+    path('process-imajjge/', views.process_image, name='process_image'),
+    path('process-image/', views.implemnetation2, name='implementation2'),
+
 
 ]
